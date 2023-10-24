@@ -1,4 +1,0 @@
-import os
-
-
-GOOGLE_OAUTH_CLIENT_ID = os.environ['GOOGLE_OAUTH_CLIENT_ID']
