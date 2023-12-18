@@ -1,5 +1,8 @@
 package save_eat.model;
 
+import java.io.Serializable;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -7,17 +10,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(
-    uniqueConstraints = {
-        @UniqueConstraint(name = "UNIQUE_OAUTH_ACCOUNT", columnNames = {"provider", "uid"}),
-        @UniqueConstraint(name = "ONE_PROVIDER_PER_USER", columnNames = {"user_id", "provider"}),
-    }
-)
+@Table(uniqueConstraints = {
+    @UniqueConstraint(name = "UNIQUE_OAUTH_ACCOUNT", columnNames = {"providerId", "uid"}),
+    @UniqueConstraint(name = "ONE_PROVIDER_PER_USER", columnNames = {"user_id", "providerId"}),
+})
 @Getter
 @NoArgsConstructor
 public class OAuth {
@@ -30,18 +30,30 @@ public class OAuth {
     @NotNull
     private User user;
 
-    @NotNull
-    private String provider;
+    @Embedded
+    private Credential credential;
 
-    @NotNull
-    private String uid;
-
-
-    @Builder
-    public OAuth(User user, String provider, String uid) {
+    public OAuth(User user, Credential credential) {
         this.user = user;
-        this.provider = provider;
-        this.uid = uid;
+        this.credential = credential;
+    }
+
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    static public class Credential implements Serializable {
+
+        @NotNull
+        private String providerId;
+
+        @NotNull
+        private String uid;
+
+        public Credential(String providerId, String uid) {
+            this.providerId = providerId;
+            this.uid = uid;
+        }
+
     }
 
 }
