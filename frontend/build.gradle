@@ -1,0 +1,21 @@
+plugins {
+  id "com.github.node-gradle.node" version "7.0.1"
+}
+
+
+task build(type: NpmTask) {
+    dependsOn npmInstall
+    args = ['run', 'build']
+}
+
+task archive(type: Copy) {
+    from 'out'
+    // into 'test'
+    // from layout.buildDirectory.dir('out')
+    into layout.buildDirectory.dir('test')
+}
+// task test1(type: NpmTask){
+//     doLast{
+        
+//     }
+// }

@@ -11,8 +11,7 @@
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
-    ".next",
-    "out"
+    "dist"
   ],
   "includes": [
     "**/*.{ts,tsx,js,jsx,json}"
