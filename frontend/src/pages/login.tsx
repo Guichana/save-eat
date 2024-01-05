@@ -1,3 +1,12 @@
+import { PageLayout } from "@/components/layout/page"
+import { LoginView } from "@/view/login"
+
 export function LoginPage() {
-	return <div>login page</div>
+	return <PageLayout
+		content={
+			<div className="self-center m-auto">
+				<LoginView handleGoogleLogin={() => {}} />
+			</div>
+		}
+	/>
 }

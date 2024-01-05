@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button"
+import { PageLayout } from "@/components/layout/page"
 
 export function HomePage() {
-	return <div>
-		<img src="logo.png" />
-		<div>home page</div>
-		<Button>Button</Button>
-	</div>
+	return <PageLayout />
 }

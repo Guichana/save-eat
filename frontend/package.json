@@ -73,6 +73,7 @@
     "react-day-picker": "^8.10.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
+    "react-query": "^3.39.3",
     "react-resizable-panels": "^1.0.5",
     "react-router-dom": "^6.11.2",
     "recoil": "^0.7.7",
