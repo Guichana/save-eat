@@ -4,18 +4,15 @@ plugins {
 
 
 task build(type: NpmTask) {
-    dependsOn npmInstall
-    args = ['run', 'build']
-}
+  group = "Frontend"
+  dependsOn npmInstall
+  args = ["run", "build"]
 
-task archive(type: Copy) {
-    from 'out'
-    // into 'test'
-    // from layout.buildDirectory.dir('out')
-    into layout.buildDirectory.dir('test')
+  doFirst {
+    delete layout.buildDirectory
+  }
+
+  inputs.dir("src")
+  inputs.files("package.json", "package-lock.json", "*.config.js", "tsconfig.json")
+  outputs.dir(layout.buildDirectory)
 }
-// task test1(type: NpmTask){
-//     doLast{
-        
-//     }
-// }

@@ -12,7 +12,7 @@ const config = {
 	entry: "./src/index.tsx",
 	output: {
 		filename: "[name].[contenthash].js",
-		path: path.resolve(__dirname, "dist"),
+		path: path.resolve(__dirname, "build"),
 	},
 	devServer: {
 		open: true,
@@ -20,6 +20,13 @@ const config = {
 		static: {
 			directory: path.join(__dirname, "public"),
 		},
+		port: 8000,
+		proxy: [
+			{
+				context: ["/api", "/oauth2", "/login"],
+				target: "http://localhost:8080",
+			},
+		],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({

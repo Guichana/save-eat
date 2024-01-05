@@ -37,3 +37,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+processResources {
+	dependsOn ':frontend:build'
+	from (project(':frontend').layout.buildDirectory) {
+		into 'static'
+	}
+}

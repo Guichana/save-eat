@@ -1,0 +1,3 @@
+rootProject.name = 'save-eat-project'
+
+include 'backend', 'frontend'
