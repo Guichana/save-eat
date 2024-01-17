@@ -13,6 +13,7 @@ const config = {
 	output: {
 		filename: "[name].[contenthash].js",
 		path: path.resolve(__dirname, "build"),
+		clean: true,
 	},
 	devServer: {
 		open: true,
@@ -74,7 +75,9 @@ module.exports = () => {
 	if (isProduction) {
 		config.mode = "production"
 
-		config.plugins.push(new MiniCssExtractPlugin())
+		config.plugins.push(new MiniCssExtractPlugin({
+			filename: "[name].[contenthash].css",
+		}))
 	} else {
 		config.mode = "development"
 	}
