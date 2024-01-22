@@ -7,7 +7,7 @@ type LayoutProps = {
 }
 
 export function PageLayout(props: LayoutProps) {
-	return <div className="flex h-dvh">
+	return <div className="flex h-dvh flex-col">
 		{props.header}
 		{props.content}
 		{props.footer}

@@ -1,23 +1,18 @@
-import { useRoutes } from "react-router-dom"
+import { Route, Routes, useRoutes } from "react-router-dom"
+import { useUserQuery } from "./hook/user"
 import { NotFoundPage } from "./pages/404"
 import { HomePage } from "./pages/home"
 import { LoginPage } from "./pages/login"
-
-// TODO: login상태에 따라 router 구성을 다르게하기
+import { SplashPage } from "./pages/splash"
 
 export function AppRouter() {
-	return useRoutes([
-		{
-			path: "/",
-			Component: HomePage,
-		},
-		{
-			path: "/login",
-			Component: LoginPage,
-		},
-		{
-			path: "*",
-			Component: NotFoundPage,
-		},
-	])
+	const { data, isLoading } = useUserQuery()
+
+	if (isLoading) return <SplashPage />
+	if (data === null) return <LoginPage />
+
+	return <Routes>
+		<Route path="/" Component={HomePage} />
+		<Route path="*" Component={NotFoundPage} />
+	</Routes>
 }

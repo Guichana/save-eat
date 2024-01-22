@@ -31,9 +31,9 @@ public class OAuth {
     private User user;
 
     @Embedded
-    private Credential credential;
+    private OAuthCredential credential;
 
-    public OAuth(User user, Credential credential) {
+    public OAuth(User user, OAuthCredential credential) {
         this.user = user;
         this.credential = credential;
     }
@@ -41,7 +41,7 @@ public class OAuth {
     @Embeddable
     @Getter
     @NoArgsConstructor
-    static public class Credential implements Serializable {
+    static public class OAuthCredential implements Serializable {
 
         @NotNull
         private String providerId;
@@ -49,7 +49,7 @@ public class OAuth {
         @NotNull
         private String uid;
 
-        public Credential(String providerId, String uid) {
+        public OAuthCredential(String providerId, String uid) {
             this.providerId = providerId;
             this.uid = uid;
         }

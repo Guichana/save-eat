@@ -6,16 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
 import org.springframework.util.Assert;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
+
+import save_eat.model.OAuth.OAuthCredential;
 
 @Entity(name = "users")
 @Getter
@@ -30,6 +33,7 @@ public class User {
     private String name;
 
     private String email;
+    private String imageUrl;
 
     @NotNull
     private LocalDateTime joinAt;
@@ -42,16 +46,20 @@ public class User {
     private User(
         String name,
         String email,
-        @Singular("oauthId") List<OAuth.Credential> oauthIds) {
+        String imageUrl,
+        @Singular("oauthId") List<OAuthCredential> oauthIds) {
 
         setName(name);
         setEmail(email);
+        setImageUrl(imageUrl);
         oauthIds.forEach(this::addOAuthId);
         this.joinAt = LocalDateTime.now();
     }
 
-    public List<OAuth> getOAuthIdList() {
-        return Collections.unmodifiableList(this.oauthIds);
+    public List<OAuthCredential> getOAuthIdList() {
+        return this.oauthIds.stream()
+            .map(item -> item.getCredential())
+            .toList();
     }
 
     public void setName(String name) {
@@ -62,14 +70,18 @@ public class User {
         this.email = email;
     }
 
-    public void addOAuthId(OAuth.Credential credential) {
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void addOAuthId(OAuthCredential oauthCredential) {
         boolean isUniqueProvider = oauthIds.stream()
             .map(oauth -> oauth.getCredential().getProviderId())
-            .noneMatch(credential.getProviderId()::equals);
+            .noneMatch(oauthCredential.getProviderId()::equals);
 
         Assert.isTrue(isUniqueProvider, "이미 등록된 클라이언트 입니다");
 
-        this.oauthIds.add(new OAuth(this, credential));
+        this.oauthIds.add(new OAuth(this, oauthCredential));
     }
 
 }

@@ -24,7 +24,7 @@ const config = {
 		port: 8000,
 		proxy: [
 			{
-				context: ["/api", "/oauth2", "/login"],
+				context: ["/api", "/oauth2", "/login", "/logout"],
 				target: "http://localhost:8080",
 			},
 		],
@@ -75,9 +75,11 @@ module.exports = () => {
 	if (isProduction) {
 		config.mode = "production"
 
-		config.plugins.push(new MiniCssExtractPlugin({
-			filename: "[name].[contenthash].css",
-		}))
+		config.plugins.push(
+			new MiniCssExtractPlugin({
+				filename: "[name].[contenthash].css",
+			}),
+		)
 	} else {
 		config.mode = "development"
 	}
