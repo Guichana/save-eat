@@ -8,7 +8,9 @@ type LayoutProps = {
 
 export function PageLayout(props: LayoutProps) {
 	return <div className="flex h-dvh flex-col">
-		{props.header}
+		<div className="sticky top-0">
+			{props.header}
+		</div>
 		{props.content}
 		{props.footer}
 	</div>
