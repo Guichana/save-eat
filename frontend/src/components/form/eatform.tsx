@@ -1,63 +1,117 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { format } from "date-fns"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { format, startOfToday } from "date-fns"
 import { ko } from "date-fns/locale"
-import { CalendarIcon, ImageIcon, PlusIcon, StarIcon, XIcon } from "lucide-react"
-import { useRef, useState } from "react"
+import { CalendarIcon, CameraIcon, StarIcon, XIcon } from "lucide-react"
+import { ReactNode, useRef, useState } from "react"
 import { useForm, useFormContext } from "react-hook-form"
 import { Rating } from "react-simple-star-rating"
 import { z } from "zod"
 
 const formSchema = z.object({
-	name: z.string(),
-	picture: z.instanceof(File),
+	food_name: z.string(),
+	photos: z.array(z.instanceof(File)),
 	rating: z.number(),
 	price: z.number(),
 	comment: z.string(),
+	place_name: z.string(),
+	tags: z.array(z.string()),
+	eat_date: z.date(),
 })
+type formSchema = z.infer<typeof formSchema>
 
-function EatPictureField() {
-	const form = useFormContext()
+function ImageSelect(props: { onSelect(img: File): void, children: ReactNode }) {
+	const ref = useRef<HTMLInputElement>(null)
+
+	function openDialog() {
+		ref.current?.click()
+	}
+
+	return <Button
+		className="border h-24 aspect-square flex-col"
+		type="button"
+		variant="secondary"
+		onClick={openDialog}
+	>
+		<Input
+			type="file"
+			accept="image/*"
+			ref={ref}
+			onChange={(e) => {
+				const file = e.target.files?.item(0)
+				if (file) {
+					props.onSelect(file)
+					ref.current!.value = ""
+				}
+			}}
+			className="sr-only"
+		/>
+		{props.children}
+	</Button>
+}
+
+function EatPhotosField() {
+	const form = useFormContext<formSchema>()
 
 	return <FormField
 		control={form.control}
-		name="picture"
-		render={({ field }) => {
-			const [image, setImage] = useState<string | null>(null)
-			const ref = useRef<HTMLInputElement>(null)
+		name="photos"
+		defaultValue={[]}
+		render={({ field: { value, onChange } }) => {
 			return <FormItem>
 				<FormLabel>사진</FormLabel>
 				<FormControl>
-					<Input
-						type="file"
-						accept="image/*"
-						// {...field}
-						ref={ref}
-						onChange={(e) => {
-							const file = e.target.files?.item(0)
-							setImage(file ? URL.createObjectURL(file) : null)
-							field.onChange(file)
-						}}
-						className="hidden"
-					/>
+					<div className="flex flex-wrap gap-2">
+						<ImageSelect
+							onSelect={(file) => {
+								const modify = Array.from(value)
+								modify.push(file)
+								onChange(modify)
+							}}
+						>
+							<CameraIcon className="size-6 mb-1" />
+							{"사진 추가"}
+						</ImageSelect>
+						{value.map((img, index) => {
+							function remove() {
+								const modify = Array.from(value)
+								modify.splice(index, 1)
+								onChange(modify)
+							}
+							function swap(goto: number) {
+								const modify = Array.from(value)
+								;[modify[goto], modify[index]] = [modify[index], modify[goto]]
+								onChange(modify)
+							}
+							const hasPrev = index > 0
+							const hasNext = (value.length - index) != 1
+
+							return <DropdownMenu key={index}>
+								<DropdownMenuTrigger>
+									<img draggable className="rounded-md border h-24" src={URL.createObjectURL(img)} />
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuItem disabled={!hasPrev} onClick={() => swap(index - 1)}>앞으로 이동</DropdownMenuItem>
+									<DropdownMenuItem disabled={!hasNext} onClick={() => swap(index + 1)}>뒤로 이동</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem onClick={remove}>삭제</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						})}
+					</div>
 				</FormControl>
-				{image
-					? <img className="rounded-md border" src={image} />
-					: <Button
-						className="w-full border h-24"
-						type="button"
-						variant="secondary"
-						onClick={() => {
-							ref.current?.click()
-						}}
-					>
-						<ImageIcon className="mr-2 size-4" />
-						{"사진 선택"}
-					</Button>}
 				<FormMessage />
 			</FormItem>
 		}}
@@ -65,10 +119,10 @@ function EatPictureField() {
 }
 
 function EatDateField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
-		name="date"
+		name="eat_date"
 		render={({ field }) => {
 			const [open, setOpen] = useState(false)
 
@@ -77,7 +131,7 @@ function EatDateField() {
 				<FormControl>
 					<div>
 						<Drawer open={open} onOpenChange={setOpen}>
-							<Button variant="outline" className="px-3 py-2" onClick={() => setOpen(true)}>
+							<Button type="button" variant="outline" className="px-3 py-2" onClick={() => setOpen(true)}>
 								<CalendarIcon className="mr-2 h-4 w-4" />
 								{field.value ? format(field.value, "yyyy-MM-dd") : "날짜 선택"}
 							</Button>
@@ -85,6 +139,7 @@ function EatDateField() {
 								<DrawerHeader>
 									<DrawerTitle>{"날짜를 선택해주세요"}</DrawerTitle>
 									<Calendar
+										className="mx-auto"
 										mode="single"
 										selected={field.value}
 										onSelect={date => {
@@ -95,9 +150,18 @@ function EatDateField() {
 									/>
 								</DrawerHeader>
 								<DrawerFooter>
-									<DrawerClose>
-										<Button className="w-full">닫기</Button>
-									</DrawerClose>
+									<Button
+										className="w-full"
+										type="button"
+										// variant={"outline"}
+										onClick={() => {
+											field.onChange(startOfToday())
+											setOpen(false)
+										}}
+									>
+										오늘
+									</Button>
+									<Button className="w-full" type="button" variant={"link"} onClick={() => setOpen(false)}>닫기</Button>
 								</DrawerFooter>
 							</DrawerContent>
 						</Drawer>
@@ -110,10 +174,10 @@ function EatDateField() {
 }
 
 function EatPlaceField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
-		name="place"
+		name="place_name"
 		render={({ field }) => (
 			<FormItem>
 				<FormLabel>가게 정보</FormLabel>
@@ -127,13 +191,13 @@ function EatPlaceField() {
 }
 
 function EatNameField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
-		name="eat-name"
+		name="food_name"
 		render={({ field }) => (
 			<FormItem>
-				<FormLabel>음식 이름</FormLabel>
+				<FormLabel>음식 정보</FormLabel>
 				<FormControl>
 					<Input placeholder="음식 이름 입력" {...field} />
 				</FormControl>
@@ -144,7 +208,7 @@ function EatNameField() {
 }
 
 function EatRatingField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
 		name="rating"
@@ -173,7 +237,7 @@ function EatRatingField() {
 }
 
 function EatPriceField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
 		name="price"
@@ -181,7 +245,14 @@ function EatPriceField() {
 			<FormItem>
 				<FormLabel>가격</FormLabel>
 				<FormControl>
-					<Input placeholder="가격" {...field} />
+					<Input
+						placeholder="가격"
+						type="number"
+						{...field}
+						onChange={({ target: { value } }) => {
+							field.onChange(parseInt(value))
+						}}
+					/>
 				</FormControl>
 				<FormMessage />
 			</FormItem>
@@ -190,7 +261,7 @@ function EatPriceField() {
 }
 
 function EatCommentField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
 		name="comment"
@@ -207,7 +278,7 @@ function EatCommentField() {
 }
 
 function EatTagField() {
-	const form = useFormContext()
+	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
 		name="tags"
@@ -228,14 +299,14 @@ function EatTagField() {
 				<FormControl>
 					<div className="flex flex-wrap gap-1">
 						{field.value.map((value: string) =>
-							<Badge className="h-7" onClick={() => remove(value)}>
+							<Badge key={value} className="h-7" onClick={() => remove(value)}>
 								{value}
 								<XIcon className="ml-2" size={16} />
 							</Badge>
 						)}
 						<Input
-							className="w-fit border-dashed text-xs h-7 p-2 focus-visible:ring-offset-0"
-							placeholder="+ 태그 추가"
+							className="w-fit border-dashed text-xs h-7 p-2 focus-visible:ring-offset-0 focus-visible:border-transparent"
+							placeholder="태그 추가"
 							value={addValue}
 							onChange={({ target: { value } }) => {
 								setAddValue(value)
@@ -260,14 +331,14 @@ function EatTagField() {
 	/>
 }
 
-export function EatForm() {
-	const form = useForm()
+export function EatForm(props: { onSubmit(data: formSchema): void }) {
+	const form = useForm<formSchema>({
+		resolver: zodResolver(formSchema),
+	})
 	return <Form {...form}>
 		<form
 			className="space-y-6 p-4"
-			onSubmit={form.handleSubmit((value) => {
-				console.log("submit", value)
-			})}
+			onSubmit={form.handleSubmit(props.onSubmit)}
 			onKeyDown={event => {
 				if (event.key === "Enter") event.preventDefault()
 			}}
@@ -275,7 +346,7 @@ export function EatForm() {
 			<EatDateField />
 			<EatPlaceField />
 			<EatNameField />
-			<EatPictureField />
+			<EatPhotosField />
 			<EatRatingField />
 			<EatPriceField />
 			<EatCommentField />

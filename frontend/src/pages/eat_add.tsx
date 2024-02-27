@@ -15,7 +15,11 @@ export function EatWritePage() {
 		}
 		content={
 			<>
-				<EatForm />
+				<EatForm
+					onSubmit={data => {
+						console.log(data)
+					}}
+				/>
 			</>
 		}
 	/>
