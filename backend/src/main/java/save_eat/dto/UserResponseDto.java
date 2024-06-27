@@ -7,14 +7,14 @@ import lombok.Builder;
 import save_eat.model.User;
 
 @Builder
-public class UserResponse implements Serializable {
+public class UserResponseDto implements Serializable {
 
     public String name;
     public String email;
     public String imageUrl;
     public LocalDateTime joinAt;
 
-    static public UserResponse from(User user) {
+    static public UserResponseDto from(User user) {
         return builder()
             .email(user.getEmail())
             .name(user.getName())
@@ -22,5 +22,4 @@ public class UserResponse implements Serializable {
             .imageUrl(user.getImageUrl())
             .build();
     }
-
 }

@@ -5,7 +5,8 @@ import save_eat.model.User;
 import save_eat.model.OAuth.OAuthCredential;
 
 @Builder
-public class UserOAuthRequest {
+public class OAuthLoginDto {
+
     private String providerId;
     private String uid;
     private String username;

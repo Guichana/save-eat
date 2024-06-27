@@ -17,7 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
-
 import save_eat.model.OAuth.OAuthCredential;
 
 @Entity(name = "users")
@@ -47,7 +46,8 @@ public class User {
         String name,
         String email,
         String imageUrl,
-        @Singular("oauthId") List<OAuthCredential> oauthIds) {
+        @Singular("oauthId")
+        List<OAuthCredential> oauthIds) {
 
         setName(name);
         setEmail(email);
