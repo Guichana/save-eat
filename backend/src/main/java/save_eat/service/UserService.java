@@ -2,7 +2,7 @@ package save_eat.service;
 
 import org.springframework.stereotype.Service;
 
-import save_eat.dto.UserResponseDto;
+import save_eat.dto.user.UserResponseDto;
 import save_eat.ports.in.usecase.user.UserReadUsecase;
 import save_eat.ports.out.repository.UserRepository;
 

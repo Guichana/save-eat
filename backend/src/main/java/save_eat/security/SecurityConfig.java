@@ -7,15 +7,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import save_eat.ports.in.usecase.user.OAuthLoginUsecase;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(
-		HttpSecurity http, OAuthLoginUsecase oauthLoginService)
+		HttpSecurity http, OidcLoginService oidcLoginService)
 		throws Exception {
 
 		return http
@@ -38,7 +36,7 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> {
 				oauth2.userInfoEndpoint(user -> {
 					// user.userService(oAuthUserService::loadUser);
-					user.oidcUserService(oauthLoginService::loadUser);
+					user.oidcUserService(oidcLoginService);
 				});
 			})
 			.exceptionHandling(exception -> {

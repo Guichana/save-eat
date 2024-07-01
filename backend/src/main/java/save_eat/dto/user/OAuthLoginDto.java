@@ -1,4 +1,4 @@
-package save_eat.dto;
+package save_eat.dto.user;
 
 import lombok.Builder;
 import save_eat.model.User;

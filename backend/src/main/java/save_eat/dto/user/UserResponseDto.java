@@ -1,4 +1,4 @@
-package save_eat.dto;
+package save_eat.dto.user;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
