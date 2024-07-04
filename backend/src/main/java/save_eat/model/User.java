@@ -46,8 +46,7 @@ public class User {
         String name,
         String email,
         String imageUrl,
-        @Singular("oauthId")
-        List<OAuthCredential> oauthIds) {
+        @Singular("oauthId") List<OAuthCredential> oauthIds) {
 
         setName(name);
         setEmail(email);
@@ -84,4 +83,22 @@ public class User {
         this.oauthIds.add(new OAuth(this, oauthCredential));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof User) {
+            if (((User)obj).id == this.id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(User.class, id);
+    }
 }

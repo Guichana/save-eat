@@ -31,4 +31,22 @@ public class Tag {
         return this.tag_value;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Tag) {
+            if (((Tag)obj).id == this.id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(Tag.class, id);
+    }
 }

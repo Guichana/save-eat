@@ -22,4 +22,23 @@ public class Photo {
         this.eat = eat;
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Photo) {
+            if (((Photo)obj).id == this.id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(Photo.class, id);
+    }
 }

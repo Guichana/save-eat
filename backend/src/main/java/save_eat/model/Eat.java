@@ -4,52 +4,67 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Collections;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
 public class Eat {
 
     @Id
     @GeneratedValue()
+    @Getter
     private Integer id;
 
     @ManyToOne
     @NotNull
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    @Column(name = "user_id")
+    private Integer userId;
+
     @NotNull
+    @Getter
+    @Setter
     private String placeName;
 
     @NotNull
+    @Getter
+    @Setter
     private LocalDateTime eatDate;
 
     @NotNull
+    @Getter
+    @Setter
     private String eatName;
 
     @NotNull
+    @Getter
+    @Setter
     private Short rating;
 
     @NotNull
+    @Getter
+    @Setter
     private Integer price;
 
     @NotNull
+    @Getter
+    @Setter
     private String comment;
 
-    @Getter(value = AccessLevel.NONE)
-    @Setter(value = AccessLevel.NONE)
     @ManyToMany()
     private List<Tag> tags;
 
@@ -67,8 +82,6 @@ public class Eat {
         this.tags.remove(tag);
     }
 
-    @Getter(value = AccessLevel.NONE)
-    @Setter(value = AccessLevel.NONE)
     @OneToMany(mappedBy = "eat")
     private List<Photo> photos;
 
@@ -82,6 +95,43 @@ public class Eat {
 
     public void removePhoto(Photo photo) {
         this.photos.remove(photo);
+    }
+
+    @Builder
+    Eat(
+        Integer userId,
+        String placeName,
+        LocalDateTime eatDate,
+        String eatName,
+        Short rating,
+        Integer price,
+        String comment) {
+        this.userId = userId;
+        setPlaceName(placeName);
+        setEatDate(eatDate);
+        setEatName(eatName);
+        setRating(rating);
+        setPrice(price);
+        setComment(comment);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Eat) {
+            if (((Eat)obj).id == this.id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(Eat.class, id);
     }
 
 }

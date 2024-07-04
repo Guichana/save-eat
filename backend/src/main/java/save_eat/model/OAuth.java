@@ -56,4 +56,23 @@ public class OAuth {
 
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof OAuth) {
+            if (((OAuth)obj).id == this.id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(OAuth.class, id);
+    }
+
 }
