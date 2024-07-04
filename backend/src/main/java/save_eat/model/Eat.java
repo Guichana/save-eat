@@ -28,11 +28,11 @@ public class Eat {
     private Integer id;
 
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
     @Column(name = "user_id")
+    @NotNull
     private Integer userId;
 
     @NotNull
