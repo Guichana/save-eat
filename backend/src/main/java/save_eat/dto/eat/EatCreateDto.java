@@ -14,7 +14,7 @@ public class EatCreateDto {
 
     private String placeName;
     private LocalDateTime eatDate;
-    private String eatName;
+    private String foodName;
     private Short rating;
     private Integer price;
     private String comment;
@@ -24,7 +24,7 @@ public class EatCreateDto {
             .userId(userId)
             .placeName(placeName)
             .eatDate(eatDate)
-            .eatName(eatName)
+            .foodName(foodName)
             .rating(rating)
             .price(price)
             .comment(comment)

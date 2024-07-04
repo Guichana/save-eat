@@ -46,7 +46,7 @@ public class EatTest {
 
 	String placeName = "placename";
 	LocalDateTime eatDate = LocalDateTime.now();
-	String eatName = "eatname";
+	String foodName = "foodName";
 	Short rating = 10;
 	Integer price = 10000;
 	String comment = "comment";
@@ -57,7 +57,7 @@ public class EatTest {
 			.userId(userId)
 			.placeName(placeName)
 			.eatDate(eatDate)
-			.eatName(eatName)
+			.foodName(foodName)
 			.rating(rating)
 			.price(price)
 			.comment(comment)
@@ -71,7 +71,7 @@ public class EatTest {
 		assertTrue(usersEat.contains(eat));
 		assertEquals(eat.getPlaceName(), placeName);
 		assertEquals(eat.getEatDate(), eatDate);
-		assertEquals(eat.getEatName(), eatName);
+		assertEquals(eat.getFoodName(), foodName);
 		assertEquals(eat.getRating(), rating);
 		assertEquals(eat.getPrice(), price);
 		assertEquals(eat.getComment(), comment);

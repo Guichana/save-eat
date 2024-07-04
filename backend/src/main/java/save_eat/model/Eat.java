@@ -48,7 +48,7 @@ public class Eat {
     @NotNull
     @Getter
     @Setter
-    private String eatName;
+    private String foodName;
 
     @NotNull
     @Getter
@@ -102,14 +102,14 @@ public class Eat {
         Integer userId,
         String placeName,
         LocalDateTime eatDate,
-        String eatName,
+        String foodName,
         Short rating,
         Integer price,
         String comment) {
         this.userId = userId;
         setPlaceName(placeName);
         setEatDate(eatDate);
-        setEatName(eatName);
+        setFoodName(foodName);
         setRating(rating);
         setPrice(price);
         setComment(comment);
