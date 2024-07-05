@@ -53,15 +53,14 @@ public class EatTest {
 
 	@Test
 	void addEat() {
-		var createDto = EatCreateDto.builder()
-			.userId(userId)
-			.placeName(placeName)
-			.eatDate(eatDate)
-			.foodName(foodName)
-			.rating(rating)
-			.price(price)
-			.comment(comment)
-			.build();
+		var createDto = new EatCreateDto();
+		createDto.setUserId(userId);
+		createDto.setPlaceName(placeName);
+		createDto.setEatDate(eatDate);
+		createDto.setFoodName(foodName);
+		createDto.setRating(rating);
+		createDto.setPrice(price);
+		createDto.setComment(comment);
 
 		var result = eatService.create(createDto);
 
