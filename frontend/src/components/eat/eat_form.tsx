@@ -21,14 +21,14 @@ import { Rating } from "react-simple-star-rating"
 import { z } from "zod"
 
 const formSchema = z.object({
-	food_name: z.string(),
+	foodName: z.string(),
 	photos: z.array(z.instanceof(File)),
 	rating: z.number(),
 	price: z.number(),
 	comment: z.string(),
-	place_name: z.string(),
+	placeName: z.string(),
 	tags: z.array(z.string()),
-	eat_date: z.date(),
+	eatDate: z.date(),
 })
 type formSchema = z.infer<typeof formSchema>
 
@@ -122,7 +122,7 @@ function EatDateField() {
 	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
-		name="eat_date"
+		name="eatDate"
 		render={({ field }) => {
 			const [open, setOpen] = useState(false)
 
@@ -177,7 +177,7 @@ function EatPlaceField() {
 	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
-		name="place_name"
+		name="placeName"
 		render={({ field }) => (
 			<FormItem>
 				<FormLabel>가게 정보</FormLabel>
@@ -194,7 +194,7 @@ function EatNameField() {
 	const form = useFormContext<formSchema>()
 	return <FormField
 		control={form.control}
-		name="food_name"
+		name="foodName"
 		render={({ field }) => (
 			<FormItem>
 				<FormLabel>음식 정보</FormLabel>

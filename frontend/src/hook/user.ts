@@ -1,4 +1,3 @@
-import { User } from "@/domain/user"
 import apiClient from "@/lib/apiClient"
 import axios from "axios"
 import { useMutation, useQuery, useQueryClient } from "react-query"
@@ -7,18 +6,20 @@ import { useMutation, useQuery, useQueryClient } from "react-query"
 export const LOGIN_STATUS = "LOGIN_STATUS"
 export const USER = "USER"
 
+type User = {
+	name: string,
+	email: string,
+	imageUrl: string,
+	joinAt: Date,
+}
+
 export function useUserQuery() {
 	return useQuery<User | null>({
 		queryKey: USER,
 		async queryFn() {
 			try {
 				const { data } = await apiClient.get("user/me")
-				return new User({
-					name: data["name"],
-					email: data["email"],
-					imageUrl: data["imageUrl"],
-					joinAt: new Date(data["joinAt"]),
-				})
+				return data
 			} catch (error) {
 				if (axios.isAxiosError(error)) {
 					if (error.response?.status === 401) return null

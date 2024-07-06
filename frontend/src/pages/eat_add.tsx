@@ -1,8 +1,17 @@
+import { EatForm } from "@/components/eat/eat_form"
+import { HeaderLayout } from "@/components/layout/header"
 import { PageLayout } from "@/components/layout/page"
+import { useEatCreateMutation } from "@/hook/eat"
 import { ChevronLeft } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { EatForm } from "../components/form/eatform"
-import { HeaderLayout } from "../components/layout/header"
+
+function EatAdd() {
+	const { mutate } = useEatCreateMutation()
+	return <EatForm
+		onSubmit={(data) => {
+			mutate(data, { onSettled: console.log })
+		}}
+	/>
+}
 
 export function EatWritePage() {
 	return <PageLayout
@@ -13,14 +22,6 @@ export function EatWritePage() {
 				title={"기록하기"}
 			/>
 		}
-		content={
-			<>
-				<EatForm
-					onSubmit={data => {
-						console.log(data)
-					}}
-				/>
-			</>
-		}
+		content={<EatAdd />}
 	/>
 }
