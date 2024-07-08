@@ -1,6 +1,6 @@
 package save_eat.dto.eat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +17,7 @@ public class EatCreateDto {
     private String placeName;
 
     @JsonProperty
-    private LocalDateTime eatDate;
+    private LocalDate eatDate;
 
     @JsonProperty
     private String foodName;

@@ -1,7 +1,13 @@
 package save_eat.dto.eat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +19,7 @@ public class EatDataDto implements Serializable {
 
 	private Integer id;
 	private String placeName;
-	private LocalDateTime eatDate;
+	private String eatDate;
 	private String foodName;
 	private Short rating;
 	private Integer price;
@@ -26,7 +32,7 @@ public class EatDataDto implements Serializable {
 		return EatDataDto.builder()
 			.id(eat.getId())
 			.placeName(eat.getPlaceName())
-			.eatDate(eat.getEatDate())
+			.eatDate(eat.getEatDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
 			.foodName(eat.getFoodName())
 			.rating(eat.getRating())
 			.price(eat.getPrice())

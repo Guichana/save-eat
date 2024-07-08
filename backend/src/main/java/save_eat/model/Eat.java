@@ -1,6 +1,6 @@
 package save_eat.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Collections;
 
@@ -43,7 +43,7 @@ public class Eat {
     @NotNull
     @Getter
     @Setter
-    private LocalDateTime eatDate;
+    private LocalDate eatDate;
 
     @NotNull
     @Getter
@@ -101,7 +101,7 @@ public class Eat {
     Eat(
         Integer userId,
         String placeName,
-        LocalDateTime eatDate,
+        LocalDate eatDate,
         String foodName,
         Short rating,
         Integer price,

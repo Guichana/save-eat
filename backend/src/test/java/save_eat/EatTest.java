@@ -2,7 +2,8 @@ package save_eat;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -53,7 +54,7 @@ public class EatTest {
 	}
 
 	String placeName = "placename";
-	LocalDateTime eatDate = LocalDateTime.now();
+	LocalDate eatDate = LocalDate.now();
 	String foodName = "foodName";
 	Short rating = 10;
 	Integer price = 10000;
@@ -89,12 +90,13 @@ public class EatTest {
 
 	@Test
 	void readEatTest() {
+
 		var readDto = EatReadDto.from(userId, eat.getId());
 		var eatDto = eatReadService.read(readDto);
 
 		assertEquals(eat.getId(), eatDto.getId());
 		assertEquals(eat.getPlaceName(), eatDto.getPlaceName());
-		assertEquals(eat.getEatDate(), eatDto.getEatDate());
+		assertTrue(eat.getEatDate().isEqual(LocalDate.parse(eatDto.getEatDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
 		assertEquals(eat.getFoodName(), eatDto.getFoodName());
 		assertEquals(eat.getRating(), eatDto.getRating());
 		assertEquals(eat.getPrice(), eatDto.getPrice());
