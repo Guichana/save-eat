@@ -3,6 +3,7 @@ package save_eat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import save_eat.dto.eat.EatCreateDto;
+import save_eat.dto.eat.EatReadDto;
+import save_eat.model.Eat;
 import save_eat.model.User;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
+import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.out.repository.EatRepository;
 import save_eat.ports.out.repository.UserRepository;
 
@@ -28,9 +32,13 @@ public class EatTest {
 	EatRepository eatRepository;
 
 	@Autowired
-	EatCreateUsecase eatService;
+	EatCreateUsecase eatCreateService;
+
+	@Autowired
+	EatReadUsecase eatReadService;
 
 	Integer userId;
+	Eat eat;
 
 	@BeforeAll
 	void prepareUser() {
@@ -62,7 +70,7 @@ public class EatTest {
 		createDto.setPrice(price);
 		createDto.setComment(comment);
 
-		var result = eatService.create(createDto);
+		var result = eatCreateService.create(createDto);
 
 		var eat = eatRepository.findById(result.getEatId()).get();
 		var usersEat = eatRepository.findByUserId(userId, null);
@@ -74,6 +82,27 @@ public class EatTest {
 		assertEquals(eat.getRating(), rating);
 		assertEquals(eat.getPrice(), price);
 		assertEquals(eat.getComment(), comment);
+
+		this.eat = eat;
+
+	}
+
+	@Test
+	void readEatTest() {
+		var readDto = EatReadDto.from(userId, eat.getId());
+		var eatDto = eatReadService.read(readDto);
+
+		assertEquals(eat.getId(), eatDto.getId());
+		assertEquals(eat.getPlaceName(), eatDto.getPlaceName());
+		assertEquals(eat.getEatDate(), eatDto.getEatDate());
+		assertEquals(eat.getFoodName(), eatDto.getFoodName());
+		assertEquals(eat.getRating(), eatDto.getRating());
+		assertEquals(eat.getPrice(), eatDto.getPrice());
+		assertEquals(eat.getComment(), eatDto.getComment());
+
+		readDto.setUserId(0);
+
+		assertThrows(NoSuchElementException.class, () -> eatReadService.read(readDto));
 
 	}
 
