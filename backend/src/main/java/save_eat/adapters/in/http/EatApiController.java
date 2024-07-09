@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import save_eat.dto.eat.EatCreateDto;
 import save_eat.dto.eat.EatCreateResultDto;
+import save_eat.dto.eat.EatDataDto;
+import save_eat.dto.eat.EatReadDto;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
+import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.security.UserPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api/eat")
@@ -18,14 +23,23 @@ import save_eat.security.UserPrincipal;
 public class EatApiController {
 
 	private final EatCreateUsecase createService;
+	private final EatReadUsecase readService;
 
 	@PostMapping
-	EatCreateResultDto create(
+	public EatCreateResultDto createEat(
 		@AuthenticationPrincipal UserPrincipal principal,
 		@RequestBody EatCreateDto createDto) {
 
 		createDto.setUserId(principal.getUserId());
 		return createService.create(createDto);
+	}
+
+	@GetMapping("{id}")
+	public EatDataDto readEat(
+		@AuthenticationPrincipal UserPrincipal principal,
+		@PathVariable("id") Integer eatId) {
+		return readService.read(
+			EatReadDto.from(principal.getUserId(), eatId));
 	}
 
 }

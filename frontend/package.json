@@ -67,7 +67,7 @@
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "embla-carousel-react": "^8.0.0-rc17",
-    "lucide-react": "^0.303.0",
+    "lucide-react": "^0.402.0",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.0",

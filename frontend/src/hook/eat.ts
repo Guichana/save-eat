@@ -1,9 +1,9 @@
 import apiClient from "@/lib/apiClient"
-import { useMutation } from "react-query"
+import { useMutation, useQuery } from "react-query"
 
 type EatCreateDto = {
 	placeName: string,
-	eatDate: Date,
+	eatDate: string,
 	foodName: string,
 	rating: number,
 	price: number,
@@ -19,6 +19,26 @@ export function useEatCreateMutation() {
 		async mutationFn(data: EatCreateDto): Promise<EatCreateResponseDto> {
 			const response = await apiClient.post("eat", data)
 			return response.data
+		},
+	})
+}
+
+type EatDataDto = {
+	id: number,
+	placeName: string,
+	eatDate: string,
+	foodName: string,
+	rating: number,
+	price: number,
+	comment: string,
+}
+
+export function useEatQuery(eatId: number) {
+	return useQuery({
+		queryKey: ["EAT_READ", eatId],
+		async queryFn(): Promise<EatDataDto> {
+			const { data } = await apiClient.get(`eat/${eatId}`)
+			return data
 		},
 	})
 }
