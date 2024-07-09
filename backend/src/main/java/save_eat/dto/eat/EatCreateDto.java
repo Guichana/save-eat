@@ -1,6 +1,8 @@
 package save_eat.dto.eat;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +19,7 @@ public class EatCreateDto {
     private String placeName;
 
     @JsonProperty
-    private LocalDate eatDate;
+    private String eatDate;
 
     @JsonProperty
     private String foodName;
@@ -36,7 +38,7 @@ public class EatCreateDto {
         return Eat.builder()
             .userId(userId)
             .placeName(placeName)
-            .eatDate(eatDate)
+            .eatDate(LocalDate.parse(eatDate, DateTimeFormatter.ISO_LOCAL_DATE))
             .foodName(foodName)
             .rating(rating)
             .price(price)
