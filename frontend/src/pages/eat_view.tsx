@@ -20,7 +20,7 @@ export function EatViewPage() {
 					rating: data.rating,
 					comment: data.comment,
 					title: data.foodName,
-					tags: [],
+					tags: data.tags,
 				}}
 			/>
 			: null}

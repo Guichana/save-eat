@@ -8,6 +8,7 @@ type EatCreateDto = {
 	rating: number,
 	price: number,
 	comment: string,
+	tags: string[],
 }
 type EatCreateResponseDto = {
 	eatId: number,
@@ -31,6 +32,7 @@ type EatDataDto = {
 	rating: number,
 	price: number,
 	comment: string,
+	tags: string[],
 }
 
 export function useEatQuery(eatId: number) {
