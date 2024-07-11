@@ -2,6 +2,7 @@ package save_eat.dto.eat;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,9 @@ public class EatCreateDto {
     @JsonProperty
     private String comment;
 
+    @JsonProperty
+    private List<String> tags;
+
     public Eat toEat() {
         //TODO: validation 추가
         return Eat.builder()
@@ -43,6 +47,7 @@ public class EatCreateDto {
             .rating(rating)
             .price(price)
             .comment(comment)
+            .tags(tags)
             .build();
     }
 

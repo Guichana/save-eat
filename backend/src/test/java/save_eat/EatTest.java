@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -59,6 +61,7 @@ public class EatTest {
 	Short rating = 10;
 	Integer price = 10000;
 	String comment = "comment";
+	List<String> tags = Arrays.asList("TEST1", "TEST2");
 
 	@Test
 	void addEat() {
@@ -70,6 +73,7 @@ public class EatTest {
 		createDto.setRating(rating);
 		createDto.setPrice(price);
 		createDto.setComment(comment);
+		createDto.setTags(tags);
 
 		var result = eatCreateService.create(createDto);
 
@@ -83,6 +87,7 @@ public class EatTest {
 		assertEquals(eat.getRating(), rating);
 		assertEquals(eat.getPrice(), price);
 		assertEquals(eat.getComment(), comment);
+		assertArrayEquals(eat.getTags().toArray(), tags.toArray());
 
 		this.eat = eat;
 
@@ -101,6 +106,7 @@ public class EatTest {
 		assertEquals(eat.getRating(), eatDto.getRating());
 		assertEquals(eat.getPrice(), eatDto.getPrice());
 		assertEquals(eat.getComment(), eatDto.getComment());
+		assertEquals(eat.getTags(), eatDto.getTags());
 
 		readDto.setUserId(0);
 

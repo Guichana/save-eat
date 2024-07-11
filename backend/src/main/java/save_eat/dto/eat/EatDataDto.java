@@ -1,13 +1,8 @@
 package save_eat.dto.eat;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +19,7 @@ public class EatDataDto implements Serializable {
 	private Short rating;
 	private Integer price;
 	private String comment;
-
-	// private List<Tag> tags;
+	private List<String> tags;
 	// private List<Photo> photos;
 
 	public static EatDataDto from(Eat eat) {
@@ -37,6 +31,7 @@ public class EatDataDto implements Serializable {
 			.rating(eat.getRating())
 			.price(eat.getPrice())
 			.comment(eat.getComment())
+			.tags(eat.getTags())
 			.build();
 	}
 

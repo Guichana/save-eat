@@ -1,16 +1,20 @@
 package save_eat.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "eat_tag")
 @Table(uniqueConstraints = {
-    @UniqueConstraint(name = "UNIQUE_TAG_IN_USER", columnNames = {"user_id", "tag_value"})
+    @UniqueConstraint(name = "UNIQUE_TAG_IN_EAT", columnNames = {"eat_id", "tag_value"})
 })
+@NoArgsConstructor
 public class Tag {
 
     @Id
@@ -18,17 +22,19 @@ public class Tag {
     private Integer id;
 
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "eat_id")
+    private Eat eat;
 
-    private String tag_value;
+    @Column(name = "tag_value")
+    private String tagValue;
 
-    public Tag(User user, String value) {
-        this.user = user;
-        this.tag_value = value;
+    public Tag(Eat eat, String value) {
+        this.eat = eat;
+        this.tagValue = value;
     }
 
     String getValue() {
-        return this.tag_value;
+        return this.tagValue;
     }
 
     @Override
