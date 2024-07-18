@@ -3,6 +3,7 @@ package save_eat.model;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Collections;
+import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -84,14 +85,15 @@ public class Eat {
             .toList();
     }
 
-    @OneToMany(mappedBy = "eat")
-    private List<Photo> photos;
+    @OneToMany(mappedBy = "eat", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Photo> photos = new ArrayList<>();
 
     public List<Photo> getPhotos() {
         return Collections.unmodifiableList(photos);
     }
 
     public void addPhoto(Photo photo) {
+        photo.setEat(this);
         this.photos.add(photo);
     }
 

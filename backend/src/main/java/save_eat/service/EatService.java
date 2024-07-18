@@ -20,7 +20,6 @@ public class EatService implements EatCreateUsecase, EatReadUsecase {
 
     public EatCreateResultDto create(EatCreateDto createDto) {
         Eat eat = eatRepository.save(createDto.toEat());
-
         return EatCreateResultDto.from(eat);
     }
 

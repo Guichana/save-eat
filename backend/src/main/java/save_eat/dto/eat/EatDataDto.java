@@ -20,7 +20,7 @@ public class EatDataDto implements Serializable {
 	private Integer price;
 	private String comment;
 	private List<String> tags;
-	// private List<Photo> photos;
+	private List<String> photos;
 
 	public static EatDataDto from(Eat eat) {
 		return EatDataDto.builder()
@@ -32,6 +32,9 @@ public class EatDataDto implements Serializable {
 			.price(eat.getPrice())
 			.comment(eat.getComment())
 			.tags(eat.getTags())
+			.photos(eat.getPhotos().stream()
+				.map(item -> item.getFileId())
+				.toList())
 			.build();
 	}
 

@@ -1,31 +1,36 @@
 package save_eat;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import save_eat.dto.eat.EatCreateDto;
 import save_eat.dto.eat.EatReadDto;
+import save_eat.dto.eat.PhotoAddDto;
 import save_eat.model.Eat;
 import save_eat.model.User;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
+import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
+import save_eat.ports.out.FileStoragePort;
 import save_eat.ports.out.repository.EatRepository;
 import save_eat.ports.out.repository.UserRepository;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
+@SpringJUnitConfig
 public class EatTest {
 
 	@Autowired
@@ -39,6 +44,12 @@ public class EatTest {
 
 	@Autowired
 	EatReadUsecase eatReadService;
+
+	@Autowired
+	PhotoAddUsecase photoAddService;
+
+	@MockBean
+	FileStoragePort storageService;
 
 	Integer userId;
 	Eat eat;
@@ -94,6 +105,32 @@ public class EatTest {
 	}
 
 	@Test
+	void addPhotoTest() {
+		var addDto = new PhotoAddDto() {
+			@Override
+			public Integer getUserId() {
+				return userId;
+			}
+
+			@Override
+			public Integer getEatId() {
+				return eat.getId();
+			}
+
+			@Override
+			public InputStream getInputStream() {
+				return InputStream.nullInputStream();
+			}
+		};
+
+		photoAddService.addPhoto(addDto);
+
+		var eat = eatRepository.findById(this.eat.getId()).get();
+		this.eat = eat;
+		assertEquals(eat.getPhotos().size(), 1);
+	}
+
+	@Test
 	void readEatTest() {
 
 		var readDto = EatReadDto.from(userId, eat.getId());
@@ -107,6 +144,7 @@ public class EatTest {
 		assertEquals(eat.getPrice(), eatDto.getPrice());
 		assertEquals(eat.getComment(), eatDto.getComment());
 		assertEquals(eat.getTags(), eatDto.getTags());
+		assertEquals(eat.getPhotos().stream().map(photo -> photo.getFileId()).toList(), eatDto.getPhotos());
 
 		readDto.setUserId(0);
 

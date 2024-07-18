@@ -5,22 +5,29 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "eat_photo")
+@NoArgsConstructor
 public class Photo {
     @Id
     @GeneratedValue
+    @Getter
     private Integer id;
 
     @ManyToOne
+    @Setter(value = AccessLevel.PROTECTED)
     private Eat eat;
 
     @NotNull
-    private String imageUrl;
+    @Getter
+    private String fileId;
 
-    public Photo(Eat eat, String imageUrl) {
-        this.eat = eat;
-        this.imageUrl = imageUrl;
+    public Photo(String fileId) {
+        this.fileId = fileId;
     }
 
     @Override
