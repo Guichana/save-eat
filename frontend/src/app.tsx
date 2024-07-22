@@ -15,10 +15,12 @@ export function AppRouter() {
 	if (data === null) return <LoginPage />
 
 	return <Routes>
-		<Route path="/" Component={HomePage} />
-		<Route path="eat">
-			<Route path=":id" Component={EatViewPage} />
-			<Route path="create" Component={EatWritePage} />
+		<Route path="/">
+			<Route index Component={HomePage} />
+			<Route path="/eat">
+				<Route path=":id" Component={EatViewPage} />
+				<Route path="create" Component={EatWritePage} />
+			</Route>
 		</Route>
 		<Route path="*" Component={NotFoundPage} />
 	</Routes>

@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { CalendarDaysIcon, HandCoinsIcon, MessageSquareQuoteIcon, StarIcon, TagIcon } from "lucide-react"
+import { HandCoinsIcon, MapPinnedIcon, MessageSquareQuoteIcon, StarIcon, TagIcon } from "lucide-react"
 import { ReactNode } from "react"
 import { Rating } from "react-simple-star-rating"
 import { Badge } from "../ui/badge"
@@ -14,18 +14,22 @@ function Item(props: { icon: ReactNode, content: ReactNode }) {
 type EatViewerProps = {
 	data: {
 		title: string,
+		place: string,
 		rating: number,
 		date: Date,
 		tags: string[],
 		price: number,
 		comment: string,
+		photos: string[],
 	},
 }
 export function EatViewer({ data }: EatViewerProps) {
 	return <>
-		<div className="flex flex-col items-center py-4 bg-white">
+		<div className="flex flex-col items-center py-5 bg-white mb-2">
+			<div className="text-sm text-gray-700">{format(data.date, "MM월 dd일")}</div>
 			<div className="text-2xl font-bold">{data.title}</div>
 			<Rating
+				className="mt-2"
 				readonly
 				initialValue={data.rating}
 				allowFraction
@@ -35,8 +39,8 @@ export function EatViewer({ data }: EatViewerProps) {
 		</div>
 
 		<Item
-			icon={<CalendarDaysIcon className="w-10" />}
-			content={format(data.date, "yyyy년 MM월 dd일")}
+			icon={<MapPinnedIcon className="w-10" />}
+			content={data.place}
 		/>
 		<Item
 			icon={<HandCoinsIcon className="w-10" />}
@@ -58,5 +62,14 @@ export function EatViewer({ data }: EatViewerProps) {
 			icon={<MessageSquareQuoteIcon className="w-10" />}
 			content={"\"" + data.comment + "\""}
 		/>
+		<div className="flex flex-col gap-2 p-2">
+			{data.photos.map(photoId =>
+				<img
+					draggable
+					className="rounded-md border snap-center"
+					src={"/photo/" + photoId}
+				/>
+			)}
+		</div>
 	</>
 }

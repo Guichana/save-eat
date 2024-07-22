@@ -1,4 +1,5 @@
 import apiClient from "@/lib/apiClient"
+import axios from "axios"
 import { useMutation, useQuery } from "react-query"
 
 type EatCreateDto = {
@@ -9,6 +10,7 @@ type EatCreateDto = {
 	price: number,
 	comment: string,
 	tags: string[],
+	photos: File[],
 }
 type EatCreateResponseDto = {
 	eatId: number,
@@ -17,9 +19,16 @@ type EatCreateResponseDto = {
 export function useEatCreateMutation() {
 	return useMutation({
 		mutationKey: "EAT_CREATE",
-		async mutationFn(data: EatCreateDto): Promise<EatCreateResponseDto> {
-			const response = await apiClient.post("eat", data)
-			return response.data
+		async mutationFn({ photos, ...data }: EatCreateDto): Promise<EatCreateResponseDto> {
+			const createResult = await apiClient.post<EatCreateResponseDto>("eat", data)
+
+			for (const photo of photos) {
+				var form = new FormData()
+				form.append("file", photo)
+				await apiClient.postForm(`eat/${createResult.data.eatId}/photo`, form)
+			}
+
+			return createResult.data
 		},
 	})
 }
@@ -33,6 +42,7 @@ type EatDataDto = {
 	price: number,
 	comment: string,
 	tags: string[],
+	photos: string[],
 }
 
 export function useEatQuery(eatId: number) {

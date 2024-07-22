@@ -9,7 +9,7 @@ type LayoutProps = {
 
 export function PageLayout(props: LayoutProps) {
 	return <div
-		className="flex h-dvh flex-col"
+		className="h-dvh overflow-y-auto block"
 		style={{ backgroundColor: props.backgroundColor ?? "rgb(241 245 249)" }}
 	>
 		<div className="sticky top-0">

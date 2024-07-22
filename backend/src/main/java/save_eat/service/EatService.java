@@ -7,6 +7,7 @@ import save_eat.dto.eat.EatCreateDto;
 import save_eat.dto.eat.EatCreateResultDto;
 import save_eat.dto.eat.EatDataDto;
 import save_eat.dto.eat.EatReadDto;
+import save_eat.exception.ResourceNotFoundException;
 import save_eat.model.Eat;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
@@ -26,7 +27,7 @@ public class EatService implements EatCreateUsecase, EatReadUsecase {
     public EatDataDto read(EatReadDto readDto) {
         Eat eat = eatRepository
             .findByUserIdAndId(readDto.getUserId(), readDto.getEatId())
-            .orElseThrow(); //TODO: notfound exception
+            .orElseThrow(ResourceNotFoundException::new);
 
         return EatDataDto.from(eat);
     }

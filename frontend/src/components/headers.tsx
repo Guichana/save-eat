@@ -7,6 +7,7 @@ import { Button } from "./ui/button"
 type NavigationHeaderProps = {
 	title?: ReactNode,
 	right?: ReactNode,
+	transparent?: boolean,
 }
 export function NavigationHeader(props: NavigationHeaderProps) {
 	return <HeaderLayout
@@ -20,7 +21,7 @@ function BackButton() {
 	function goBack() {
 		navigate(-1)
 	}
-	return <Button variant={"link"} onClick={goBack}>
-		<ChevronLeft />
+	return <Button variant={"link"} onClick={goBack} size={"icon"}>
+		<ChevronLeft size={24} />
 	</Button>
 }

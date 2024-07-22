@@ -24,7 +24,7 @@ const config = {
 		port: 8000,
 		proxy: [
 			{
-				context: ["/api", "/oauth2", "/login", "/logout"],
+				context: ["/api", "/oauth2", "/login", "/logout", "/test", "/photo"],
 				target: "http://localhost:8080",
 			},
 		],

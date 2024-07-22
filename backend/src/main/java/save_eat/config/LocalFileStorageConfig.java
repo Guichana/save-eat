@@ -16,18 +16,19 @@ import save_eat.ports.out.FileStoragePort;
 public class LocalFileStorageConfig {
 
     Path tempPath = Paths.get(UUID.randomUUID().toString());
+    String urlPrefix = "/photo/";
 
     @Bean
     FileStoragePort fileStorage() {
-        return new TempFileStorageAdapter(tempPath, "/photo/");
+        return new TempFileStorageAdapter(tempPath, urlPrefix);
     }
 
     @Bean
     WebMvcConfigurer addStaticResource() {
         return new WebMvcConfigurer() {
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("photo/**")
-                    .addResourceLocations(tempPath.toString());
+                registry.addResourceHandler(urlPrefix + "**")
+                    .addResourceLocations("file:" + tempPath.toString() + "/");
             }
 
         };
