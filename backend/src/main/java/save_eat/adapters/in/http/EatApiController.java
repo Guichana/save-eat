@@ -14,14 +14,18 @@ import lombok.RequiredArgsConstructor;
 import save_eat.dto.eat.EatCreateDto;
 import save_eat.dto.eat.EatCreateResultDto;
 import save_eat.dto.eat.EatDataDto;
+import save_eat.dto.eat.EatListDataDto;
+import save_eat.dto.eat.EatListReadDto;
 import save_eat.dto.eat.EatReadDto;
 import save_eat.dto.eat.PhotoAddDto;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
+import save_eat.ports.in.usecase.eat.EatListReadUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
 import save_eat.security.UserPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("api/eat")
@@ -30,6 +34,7 @@ public class EatApiController {
 
 	private final EatCreateUsecase createService;
 	private final EatReadUsecase readService;
+	private final EatListReadUsecase listService;
 	private final PhotoAddUsecase photoAddServce;
 
 	@PostMapping
@@ -63,6 +68,19 @@ public class EatApiController {
 		@PathVariable("id") Integer eatId) {
 		return readService.read(
 			EatReadDto.from(principal.getUserId(), eatId));
+	}
+
+	@GetMapping()
+	public EatListDataDto readEatList(
+		@AuthenticationPrincipal UserPrincipal principal,
+		@RequestParam("page") Integer page) {
+
+		EatListReadDto readDto = new EatListReadDto();
+		readDto.setPage(page);
+		readDto.setUserId(principal.getUserId());
+		readDto.setSize(10);
+
+		return listService.list(readDto);
 	}
 
 }

@@ -1,15 +1,13 @@
 package save_eat;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,11 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import save_eat.dto.eat.EatCreateDto;
+import save_eat.dto.eat.EatListReadDto;
 import save_eat.dto.eat.EatReadDto;
 import save_eat.dto.eat.PhotoAddDto;
+import save_eat.exception.ResourceNotFoundException;
 import save_eat.model.Eat;
 import save_eat.model.User;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
+import save_eat.ports.in.usecase.eat.EatListReadUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
 import save_eat.ports.out.FileStoragePort;
@@ -31,6 +32,7 @@ import save_eat.ports.out.repository.UserRepository;
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringJUnitConfig
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class EatTest {
 
 	@Autowired
@@ -47,6 +49,9 @@ public class EatTest {
 
 	@Autowired
 	PhotoAddUsecase photoAddService;
+
+	@Autowired
+	EatListReadUsecase eatListReadService;
 
 	@MockBean
 	FileStoragePort storageService;
@@ -75,6 +80,7 @@ public class EatTest {
 	List<String> tags = Arrays.asList("TEST1", "TEST2");
 
 	@Test
+	@Order(1)
 	void addEat() {
 		var createDto = new EatCreateDto();
 		createDto.setUserId(userId);
@@ -105,6 +111,7 @@ public class EatTest {
 	}
 
 	@Test
+	@Order(2)
 	void addPhotoTest() {
 		var addDto = new PhotoAddDto() {
 			@Override
@@ -131,6 +138,7 @@ public class EatTest {
 	}
 
 	@Test
+	@Order(3)
 	void readEatTest() {
 
 		var readDto = EatReadDto.from(userId, eat.getId());
@@ -148,7 +156,33 @@ public class EatTest {
 
 		readDto.setUserId(0);
 
-		assertThrows(NoSuchElementException.class, () -> eatReadService.read(readDto));
+		assertThrows(ResourceNotFoundException.class, () -> eatReadService.read(readDto));
+
+	}
+
+	@Test
+	@Order(4)
+	void readEatListTest() {
+		var readDto = new EatListReadDto();
+		readDto.setPage(0);
+		readDto.setSize(1);
+		readDto.setUserId(userId);
+
+		var result = eatListReadService.list(readDto);
+		var list = result.getList();
+		assertEquals(list.size(), 1);
+
+		var sample = list.get(0);
+		assertEquals(eat.getId(), sample.getId());
+		assertEquals(eat.getPlaceName(), sample.getPlaceName());
+		assertTrue(eat.getEatDate().isEqual(LocalDate.parse(sample.getEatDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
+		assertEquals(eat.getFoodName(), sample.getFoodName());
+		assertEquals(eat.getRating(), sample.getRating());
+		assertEquals(eat.getPhotos().get(0).getFileId(), sample.getPhoto());
+
+		readDto.setPage(1);
+		var result2 = eatListReadService.list(readDto);
+		assertEquals(result2.getList().size(), 0);
 
 	}
 
