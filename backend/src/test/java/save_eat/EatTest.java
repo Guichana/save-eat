@@ -97,7 +97,7 @@ public class EatTest {
 		var eat = eatRepository.findById(result.getEatId()).get();
 		var usersEat = eatRepository.findByUserId(userId, null);
 
-		assertTrue(usersEat.contains(eat));
+		assertTrue(usersEat.toList().contains(eat));
 		assertEquals(eat.getPlaceName(), placeName);
 		assertTrue(eat.getEatDate().isEqual(LocalDate.parse(eatDate, DateTimeFormatter.ISO_LOCAL_DATE)));
 		assertEquals(eat.getFoodName(), foodName);
@@ -171,14 +171,15 @@ public class EatTest {
 		var result = eatListReadService.list(readDto);
 		var list = result.getList();
 		assertEquals(list.size(), 1);
+		assertEquals(result.getHasNext(), false);
 
 		var sample = list.get(0);
 		assertEquals(eat.getId(), sample.getId());
 		assertEquals(eat.getPlaceName(), sample.getPlaceName());
-		assertTrue(eat.getEatDate().isEqual(LocalDate.parse(sample.getEatDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
+		assertTrue(eat.getEatDate().isEqual(LocalDate.parse(sample.getDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
 		assertEquals(eat.getFoodName(), sample.getFoodName());
 		assertEquals(eat.getRating(), sample.getRating());
-		assertEquals(eat.getPhotos().get(0).getFileId(), sample.getPhoto());
+		assertEquals(eat.getPhotos().get(0).getFileId(), sample.getThumbnail());
 
 		readDto.setPage(1);
 		var result2 = eatListReadService.list(readDto);

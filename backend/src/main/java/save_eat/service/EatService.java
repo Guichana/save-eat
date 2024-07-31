@@ -2,6 +2,7 @@ package save_eat.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class EatService implements EatCreateUsecase, EatReadUsecase, EatListRead
     }
 
     public EatListDataDto list(EatListReadDto readDto) {
-        List<Eat> list = eatRepository.findByUserId(readDto.getUserId(), readDto.getPageable());
+        Page<Eat> list = eatRepository.findByUserId(readDto.getUserId(), readDto.getPageable());
         return EatListDataDto.from(list);
     }
 
