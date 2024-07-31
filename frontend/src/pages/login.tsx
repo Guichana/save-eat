@@ -5,7 +5,7 @@ import { navigateOAuthLogin } from "../lib/urls"
 export function LoginPage() {
 	return <PageLayout
 		content={
-			<div className="self-center m-auto">
+			<div className="flex h-screen items-center justify-center pb-20">
 				<LoginView
 					handleGoogleLogin={() => navigateOAuthLogin("google")}
 				/>

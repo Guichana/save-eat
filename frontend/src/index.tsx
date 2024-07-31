@@ -1,8 +1,8 @@
 import "@/assets/styles/global.css"
 import "@/assets/styles/font.css"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRoot } from "react-dom/client"
 import { ErrorBoundary } from "react-error-boundary"
-import { QueryClient, QueryClientProvider } from "react-query"
 import { HashRouter } from "react-router-dom"
 import { RecoilRoot } from "recoil"
 import { AppRouter } from "./app"
@@ -14,7 +14,8 @@ const queryClient = new QueryClient({
 		queries: {
 			retry: false,
 			refetchInterval: false,
-			useErrorBoundary: true,
+			throwOnError: true,
+			// useErrorBoundary: true,
 		},
 	},
 })

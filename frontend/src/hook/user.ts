@@ -1,6 +1,6 @@
 import apiClient from "@/lib/apiClient"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
-import { useMutation, useQuery, useQueryClient } from "react-query"
 
 // QueryKey
 export const LOGIN_STATUS = "LOGIN_STATUS"
@@ -15,7 +15,7 @@ type User = {
 
 export function useUserQuery() {
 	return useQuery<User | null>({
-		queryKey: USER,
+		queryKey: [USER],
 		async queryFn() {
 			try {
 				const { data } = await apiClient.get("user/me")

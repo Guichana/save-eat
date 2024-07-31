@@ -1,6 +1,7 @@
 import apiClient from "@/lib/apiClient"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { useMutation, useQuery } from "react-query"
+import { number, z } from "zod"
 
 type EatCreateDto = {
 	placeName: string,
@@ -18,7 +19,7 @@ type EatCreateResponseDto = {
 
 export function useEatCreateMutation() {
 	return useMutation({
-		mutationKey: "EAT_CREATE",
+		mutationKey: ["EAT_CREATE"],
 		async mutationFn({ photos, ...data }: EatCreateDto): Promise<EatCreateResponseDto> {
 			const createResult = await apiClient.post<EatCreateResponseDto>("eat", data)
 
@@ -52,5 +53,37 @@ export function useEatQuery(eatId: number) {
 			const { data } = await apiClient.get(`eat/${eatId}`)
 			return data
 		},
+	})
+}
+
+const EatListDataDto = z.object({
+	list: z.array(
+		z.object({
+			id: z.number(),
+			placeName: z.string(),
+			date: z.coerce.date(),
+			foodName: z.string(),
+			rating: z.number(),
+			thumbnail: z.string().nullable(),
+		}),
+	),
+	hasNext: z.boolean(),
+})
+
+export function useEatListInfiniteQuery() {
+	return useInfiniteQuery({
+		queryKey: ["EAT_LIST"],
+		async queryFn({ pageParam }) {
+			const { data } = await apiClient.get("eat", { params: { page: pageParam } })
+			return EatListDataDto.parse(data)
+		},
+		select(data) {
+			return {
+				pageParams: data.pageParams,
+				pages: data.pages.map(item => item.list),
+			}
+		},
+		initialPageParam: 0,
+		getNextPageParam: (lastPage, pages) => lastPage.hasNext ? pages.length : null,
 	})
 }
