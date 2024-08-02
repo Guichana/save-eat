@@ -14,15 +14,19 @@ import lombok.RequiredArgsConstructor;
 import save_eat.dto.eat.EatCreateDto;
 import save_eat.dto.eat.EatCreateResultDto;
 import save_eat.dto.eat.EatDataDto;
+import save_eat.dto.eat.EatDeleteDto;
 import save_eat.dto.eat.EatListDataDto;
 import save_eat.dto.eat.EatListReadDto;
 import save_eat.dto.eat.EatReadDto;
 import save_eat.dto.eat.PhotoAddDto;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
+import save_eat.ports.in.usecase.eat.EatDeleteUsecase;
 import save_eat.ports.in.usecase.eat.EatListReadUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
 import save_eat.security.UserPrincipal;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +39,7 @@ public class EatApiController {
 	private final EatCreateUsecase createService;
 	private final EatReadUsecase readService;
 	private final EatListReadUsecase listService;
+	private final EatDeleteUsecase deleteService;
 	private final PhotoAddUsecase photoAddServce;
 
 	@PostMapping
@@ -81,6 +86,15 @@ public class EatApiController {
 		readDto.setSize(10);
 
 		return listService.list(readDto);
+	}
+
+	@DeleteMapping("{id}")
+	public void deleteEat(
+		@AuthenticationPrincipal UserPrincipal principal,
+		@PathVariable("id") Integer eatId) {
+
+		EatDeleteDto deleteDto = EatDeleteDto.from(principal.getUserId(), eatId);
+		deleteService.delete(deleteDto);
 	}
 
 }

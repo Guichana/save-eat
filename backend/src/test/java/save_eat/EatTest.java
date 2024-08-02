@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import save_eat.dto.eat.EatCreateDto;
+import save_eat.dto.eat.EatDeleteDto;
 import save_eat.dto.eat.EatListReadDto;
 import save_eat.dto.eat.EatReadDto;
 import save_eat.dto.eat.PhotoAddDto;
@@ -22,6 +23,7 @@ import save_eat.exception.ResourceNotFoundException;
 import save_eat.model.Eat;
 import save_eat.model.User;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
+import save_eat.ports.in.usecase.eat.EatDeleteUsecase;
 import save_eat.ports.in.usecase.eat.EatListReadUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
@@ -52,6 +54,9 @@ public class EatTest {
 
 	@Autowired
 	EatListReadUsecase eatListReadService;
+
+	@Autowired
+	EatDeleteUsecase eatDeleteService;
 
 	@MockBean
 	FileStoragePort storageService;
@@ -185,6 +190,16 @@ public class EatTest {
 		var result2 = eatListReadService.list(readDto);
 		assertEquals(result2.getList().size(), 0);
 
+	}
+
+	@Test
+	@Order(5)
+	void deleteEatTest() {
+		var deleteDto = EatDeleteDto.from(userId, eat.getId());
+		eatDeleteService.delete(deleteDto);
+
+		var readDto = EatReadDto.from(userId, eat.getId());
+		assertThrows(ResourceNotFoundException.class, () -> eatReadService.read(readDto));
 	}
 
 }
