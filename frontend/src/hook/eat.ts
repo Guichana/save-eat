@@ -87,3 +87,12 @@ export function useEatListInfiniteQuery() {
 		getNextPageParam: (lastPage, pages) => lastPage.hasNext ? pages.length : null,
 	})
 }
+
+export function useEatDeleteMutation() {
+	return useMutation({
+		mutationKey: ["EAT_DELETE"],
+		async mutationFn(eat_id: number) {
+			await apiClient.delete("/eat/" + eat_id)
+		},
+	})
+}
