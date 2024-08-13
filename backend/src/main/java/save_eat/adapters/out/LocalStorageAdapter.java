@@ -8,13 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import save_eat.ports.out.FileStoragePort;
 
 @RequiredArgsConstructor
-public class TempFileStorageAdapter implements FileStoragePort {
+public class LocalStorageAdapter implements FileStoragePort {
 
     private final Path dir;
     private final String urlPrefix;
@@ -28,15 +26,6 @@ public class TempFileStorageAdapter implements FileStoragePort {
         }
     }
 
-    @PostConstruct
-    void initDir() throws IOException {
-        Files.createDirectory(dir);
-    }
-
-    @PreDestroy
-    void deleteDir() throws IOException {
-        Files.delete(dir);
-    }
 
     @Override
     public String find(String name) {

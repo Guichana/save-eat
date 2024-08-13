@@ -1,26 +1,34 @@
 package save_eat.config;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import save_eat.adapters.out.TempFileStorageAdapter;
+import jakarta.annotation.PostConstruct;
+
+import save_eat.adapters.out.LocalStorageAdapter;
 import save_eat.ports.out.FileStoragePort;
 
 @Configuration
-public class LocalFileStorageConfig {
+public class TempFileStorageConfig {
 
-    Path tempPath = Paths.get(UUID.randomUUID().toString());
+    Path path;
     String urlPrefix = "/photo/";
+
+    @PostConstruct
+    void initDir() throws IOException {
+        path = Files.createTempDirectory("save-eat");
+        path.toFile().deleteOnExit();
+    }
 
     @Bean
     FileStoragePort fileStorage() {
-        return new TempFileStorageAdapter(tempPath, urlPrefix);
+        return new LocalStorageAdapter(path, urlPrefix);
     }
 
     @Bean
@@ -28,9 +36,8 @@ public class LocalFileStorageConfig {
         return new WebMvcConfigurer() {
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry.addResourceHandler(urlPrefix + "**")
-                    .addResourceLocations("file:" + tempPath.toString() + "/");
+                    .addResourceLocations("file:" + path.toString() + "/");
             }
-
         };
     }
 
