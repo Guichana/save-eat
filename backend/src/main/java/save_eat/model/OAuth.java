@@ -1,10 +1,14 @@
 package save_eat.model;
 
 import java.io.Serializable;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -26,9 +30,13 @@ public class OAuth {
     @GeneratedValue()
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     @NotNull
     private User user;
+
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Integer userId;
 
     @Embedded
     private OAuthCredential credential;

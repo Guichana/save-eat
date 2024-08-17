@@ -9,6 +9,7 @@ import { LoginPage } from "./pages/login"
 import { SplashPage } from "./pages/splash"
 
 export function AppRouter() {
+	return <LoginPage />
 	const { data, isLoading } = useUserQuery()
 
 	if (isLoading) return <SplashPage />

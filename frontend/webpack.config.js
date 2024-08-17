@@ -3,6 +3,8 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const { EnvironmentPlugin } = require("webpack")
+require("dotenv").config()
 
 const isProduction = process.env.NODE_ENV == "production"
 
@@ -34,6 +36,7 @@ const config = {
 			title: "SaveEat",
 			favicon: "src/assets/favicon.png",
 		}),
+		new EnvironmentPlugin("APP_OAUTH_CLIENT_GOOGLE_ID"),
 		// Add your plugins here
 		// Learn more about plugins from https://webpack.js.org/configuration/plugins/
 	],

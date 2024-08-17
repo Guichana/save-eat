@@ -8,9 +8,12 @@ type LoginProps = {
 export function LoginView(props: LoginProps) {
 	return <div className="max-w-80">
 		<LogoSqure width="100%" height="100%" />
-		<Button variant="outline" className="w-full" onClick={props.handleGoogleLogin}>
+		{/* <GoogleLoginButton /> */}
+		{
+			/* <Button variant="outline" className="w-full" onClick={props.handleGoogleLogin}>
 			<GoogleIcon />
 			{"Google로 시작하기"}
-		</Button>
+		</Button> */
+		}
 	</div>
 }
