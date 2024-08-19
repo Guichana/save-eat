@@ -24,7 +24,7 @@ import save_eat.ports.in.usecase.eat.EatDeleteUsecase;
 import save_eat.ports.in.usecase.eat.EatListReadUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
-import save_eat.security.UserPrincipal;
+import save_eat.security.UserId;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,24 +44,24 @@ public class EatApiController {
 
 	@PostMapping
 	public EatCreateResultDto createEat(
-		@AuthenticationPrincipal UserPrincipal principal,
+		@UserId Integer userId,
 		@RequestBody EatCreateDto createDto) {
 
-		createDto.setUserId(principal.getUserId());
+		createDto.setUserId(userId);
 		return createService.create(createDto);
 	}
 
 	@PostMapping("{eatId}/photo")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public void addPhoto(
-		@AuthenticationPrincipal UserPrincipal principal,
+		@UserId Integer userId,
 		@RequestPart("file") MultipartFile file,
 		@PathVariable("eatId") Integer eatId) {
 
 		PhotoAddDto addDto = new PhotoAddDto();
 		addDto.setEatId(eatId);
 		addDto.setFile(file);
-		addDto.setUserId(principal.getUserId());
+		addDto.setUserId(userId);
 
 		photoAddServce.addPhoto(addDto);
 
@@ -69,20 +69,20 @@ public class EatApiController {
 
 	@GetMapping("{id}")
 	public EatDataDto readEat(
-		@AuthenticationPrincipal UserPrincipal principal,
+		@UserId Integer userId,
 		@PathVariable("id") Integer eatId) {
 		return readService.read(
-			EatReadDto.from(principal.getUserId(), eatId));
+			EatReadDto.from(userId, eatId));
 	}
 
 	@GetMapping()
 	public EatListDataDto readEatList(
-		@AuthenticationPrincipal UserPrincipal principal,
+		@UserId Integer userId,
 		@RequestParam("page") Integer page) {
 
 		EatListReadDto readDto = new EatListReadDto();
 		readDto.setPage(page);
-		readDto.setUserId(principal.getUserId());
+		readDto.setUserId(userId);
 		readDto.setSize(10);
 
 		return listService.list(readDto);
@@ -90,10 +90,10 @@ public class EatApiController {
 
 	@DeleteMapping("{id}")
 	public void deleteEat(
-		@AuthenticationPrincipal UserPrincipal principal,
+		@UserId Integer userId,
 		@PathVariable("id") Integer eatId) {
 
-		EatDeleteDto deleteDto = EatDeleteDto.from(principal.getUserId(), eatId);
+		EatDeleteDto deleteDto = EatDeleteDto.from(userId, eatId);
 		deleteService.delete(deleteDto);
 	}
 

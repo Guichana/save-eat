@@ -39,7 +39,6 @@ export function useGoogleLogin(onLogin: (credential: string) => void) {
 				auto_select: true,
 				callback(response) {
 					onLogin(response.credential)
-					console.log(response)
 				},
 				ux_mode: "popup",
 			})

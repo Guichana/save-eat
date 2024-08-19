@@ -1,8 +1,11 @@
 import axios from "axios"
 
-export default axios.create({
+const api = axios.create({
 	baseURL: "api",
-	withCredentials: true,
 })
 
-// TODO: csrf interceptor 추가
+export function setBearerToken(token?: string | null) {
+	api.defaults.headers.common.Authorization = token ? "Bearer ".concat(token) : undefined
+}
+
+export default api

@@ -1,19 +1,19 @@
-import { Route, Routes, useRoutes } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
+import { useAuthentication } from "./hook/auth"
 import { useUserQuery } from "./hook/user"
 import { NotFoundPage } from "./pages/404"
 import { EatWritePage } from "./pages/eat_add"
 import { EatViewPage } from "./pages/eat_view"
-import { ErrorPage } from "./pages/error"
 import { HomePage } from "./pages/home"
 import { LoginPage } from "./pages/login"
-import { SplashPage } from "./pages/splash"
 
 export function AppRouter() {
-	return <LoginPage />
-	const { data, isLoading } = useUserQuery()
+	const { authenticated } = useAuthentication()
+	const { isSuccess } = useUserQuery()
 
-	if (isLoading) return <SplashPage />
-	if (data === null) return <LoginPage />
+	if (!authenticated || !isSuccess) {
+		return <LoginPage />
+	}
 
 	return <Routes>
 		<Route path="/">
