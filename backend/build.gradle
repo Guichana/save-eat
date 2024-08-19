@@ -37,6 +37,9 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'com.h2database:h2'
+
+	implementation 'com.h2database:h2' //임시
+	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.3'
 }
 
 tasks.named('test') {
@@ -50,3 +53,16 @@ processResources {
 		into 'static'
 	}
 }
+
+
+task buildZip(type: Zip) {
+  from compileJava
+  from processResources
+  into('lib') {
+    from(configurations.runtimeClasspath) {
+      exclude 'tomcat-embed-*'
+    }
+  }
+}
+
+build.dependsOn buildZip
