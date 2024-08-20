@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -35,6 +37,7 @@ import save_eat.ports.out.repository.UserRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringJUnitConfig
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class EatTest {
 
 	@Autowired
