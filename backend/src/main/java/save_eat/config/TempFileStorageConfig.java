@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,6 +16,7 @@ import save_eat.adapters.out.LocalStorageAdapter;
 import save_eat.ports.out.FileStoragePort;
 
 @Configuration
+@Profile("dev")
 public class TempFileStorageConfig {
 
     Path path;
@@ -28,7 +30,7 @@ public class TempFileStorageConfig {
 
     @Bean
     FileStoragePort fileStorage() {
-        return new LocalStorageAdapter(path, urlPrefix);
+        return new LocalStorageAdapter(path);
     }
 
     @Bean

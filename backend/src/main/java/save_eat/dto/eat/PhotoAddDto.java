@@ -1,26 +1,16 @@
 package save_eat.dto.eat;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.springframework.web.multipart.MultipartFile;
-
+import lombok.Builder;
 import lombok.Setter;
+import save_eat.dto.storage.PhotoFileDto;
 
 @Setter
+@Builder
 public class PhotoAddDto {
 
-    private MultipartFile file;
     private Integer eatId;
     private Integer userId;
-
-    public InputStream getInputStream() {
-        try {
-            return file.getInputStream();
-        } catch (IOException e) {
-            throw new Error(e);
-        }
-    }
+    private PhotoFileDto photoFile;
 
     public Integer getUserId() {
         return userId;
@@ -28,6 +18,10 @@ public class PhotoAddDto {
 
     public Integer getEatId() {
         return eatId;
+    }
+
+    public PhotoFileDto getPhotoFile() {
+        return photoFile;
     }
 
 }

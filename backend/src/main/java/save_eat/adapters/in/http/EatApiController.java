@@ -19,6 +19,7 @@ import save_eat.dto.eat.EatListDataDto;
 import save_eat.dto.eat.EatListReadDto;
 import save_eat.dto.eat.EatReadDto;
 import save_eat.dto.eat.PhotoAddDto;
+import save_eat.dto.storage.PhotoFileDto;
 import save_eat.ports.in.usecase.eat.EatCreateUsecase;
 import save_eat.ports.in.usecase.eat.EatDeleteUsecase;
 import save_eat.ports.in.usecase.eat.EatListReadUsecase;
@@ -58,10 +59,11 @@ public class EatApiController {
 		@RequestPart("file") MultipartFile file,
 		@PathVariable("eatId") Integer eatId) {
 
-		PhotoAddDto addDto = new PhotoAddDto();
-		addDto.setEatId(eatId);
-		addDto.setFile(file);
-		addDto.setUserId(userId);
+		PhotoAddDto addDto = PhotoAddDto.builder()
+			.eatId(eatId)
+			.userId(userId)
+			.photoFile(PhotoFileDto.from(file))
+			.build();
 
 		photoAddServce.addPhoto(addDto);
 

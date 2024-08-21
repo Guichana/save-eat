@@ -1,13 +1,12 @@
 package save_eat.ports.out;
 
-import java.io.InputStream;
+import save_eat.dto.storage.PhotoFileDto;
 
 public interface FileStoragePort {
 
-    String save(InputStream file, String name);
+    void save(PhotoFileDto fileDto);
 
-    String find(String name);
-
-    void delete(String name);
+    // String find(String name);
+    // void delete(String name);
 
 }

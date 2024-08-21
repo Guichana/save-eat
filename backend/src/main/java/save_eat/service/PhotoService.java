@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import save_eat.dto.eat.PhotoAddDto;
+import save_eat.dto.storage.PhotoFileDto;
 import save_eat.model.Eat;
 import save_eat.model.Photo;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
@@ -19,9 +20,10 @@ public class PhotoService implements PhotoAddUsecase {
     final private EatRepository eatRepository;
     final private FileStoragePort fileStoragePort;
 
-    private Photo createPhoto(PhotoAddDto addDto) {
+    private Photo createPhoto(PhotoFileDto photoFileDto) {
         String fileId = UUID.randomUUID().toString();
-        fileStoragePort.save(addDto.getInputStream(), fileId);
+        photoFileDto.setFilename(fileId);
+        fileStoragePort.save(photoFileDto);
         return new Photo(fileId);
     }
 
@@ -31,7 +33,9 @@ public class PhotoService implements PhotoAddUsecase {
             .findByUserIdAndId(addDto.getUserId(), addDto.getEatId())
             .get();
 
-        eat.addPhoto(createPhoto(addDto));
+        Photo photo = createPhoto(addDto.getPhotoFile());
+
+        eat.addPhoto(photo);
         eatRepository.save(eat);
     }
 

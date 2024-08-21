@@ -21,6 +21,7 @@ import save_eat.dto.eat.EatDeleteDto;
 import save_eat.dto.eat.EatListReadDto;
 import save_eat.dto.eat.EatReadDto;
 import save_eat.dto.eat.PhotoAddDto;
+import save_eat.dto.storage.PhotoFileDto;
 import save_eat.exception.ResourceNotFoundException;
 import save_eat.model.Eat;
 import save_eat.model.User;
@@ -121,22 +122,14 @@ public class EatTest {
 	@Test
 	@Order(2)
 	void addPhotoTest() {
-		var addDto = new PhotoAddDto() {
-			@Override
-			public Integer getUserId() {
-				return userId;
-			}
-
-			@Override
-			public Integer getEatId() {
-				return eat.getId();
-			}
-
-			@Override
-			public InputStream getInputStream() {
-				return InputStream.nullInputStream();
-			}
-		};
+		var addDto = PhotoAddDto.builder()
+			.userId(userId)
+			.eatId(eat.getId())
+			.photoFile(
+				PhotoFileDto.builder()
+					.inputStream(InputStream.nullInputStream())
+					.build())
+			.build();
 
 		photoAddService.addPhoto(addDto);
 
