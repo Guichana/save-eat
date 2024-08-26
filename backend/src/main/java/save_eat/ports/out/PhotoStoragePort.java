@@ -2,7 +2,7 @@ package save_eat.ports.out;
 
 import save_eat.dto.storage.PhotoFileDto;
 
-public interface FileStoragePort {
+public interface PhotoStoragePort {
 
     void save(PhotoFileDto fileDto);
 

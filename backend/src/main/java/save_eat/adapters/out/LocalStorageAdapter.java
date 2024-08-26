@@ -6,10 +6,10 @@ import java.nio.file.Path;
 
 import lombok.RequiredArgsConstructor;
 import save_eat.dto.storage.PhotoFileDto;
-import save_eat.ports.out.FileStoragePort;
+import save_eat.ports.out.PhotoStoragePort;
 
 @RequiredArgsConstructor
-public class LocalStorageAdapter implements FileStoragePort {
+public class LocalStorageAdapter implements PhotoStoragePort {
 
     private final Path dir;
 

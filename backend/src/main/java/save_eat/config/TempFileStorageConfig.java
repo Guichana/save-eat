@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import jakarta.annotation.PostConstruct;
 
 import save_eat.adapters.out.LocalStorageAdapter;
-import save_eat.ports.out.FileStoragePort;
+import save_eat.ports.out.PhotoStoragePort;
 
 @Configuration
 @Profile("dev")
@@ -29,7 +29,7 @@ public class TempFileStorageConfig {
     }
 
     @Bean
-    FileStoragePort fileStorage() {
+    PhotoStoragePort fileStorage() {
         return new LocalStorageAdapter(path);
     }
 

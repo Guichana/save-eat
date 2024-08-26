@@ -30,7 +30,7 @@ import save_eat.ports.in.usecase.eat.EatDeleteUsecase;
 import save_eat.ports.in.usecase.eat.EatListReadUsecase;
 import save_eat.ports.in.usecase.eat.EatReadUsecase;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
-import save_eat.ports.out.FileStoragePort;
+import save_eat.ports.out.PhotoStoragePort;
 import save_eat.ports.out.repository.EatRepository;
 import save_eat.ports.out.repository.UserRepository;
 
@@ -63,7 +63,7 @@ public class EatTest {
 	EatDeleteUsecase eatDeleteService;
 
 	@MockBean
-	FileStoragePort storageService;
+	PhotoStoragePort storageService;
 
 	Integer userId;
 	Eat eat;

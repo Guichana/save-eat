@@ -10,7 +10,7 @@ import save_eat.dto.storage.PhotoFileDto;
 import save_eat.model.Eat;
 import save_eat.model.Photo;
 import save_eat.ports.in.usecase.eat.PhotoAddUsecase;
-import save_eat.ports.out.FileStoragePort;
+import save_eat.ports.out.PhotoStoragePort;
 import save_eat.ports.out.repository.EatRepository;
 
 @Service
@@ -18,7 +18,7 @@ import save_eat.ports.out.repository.EatRepository;
 public class PhotoService implements PhotoAddUsecase {
 
     final private EatRepository eatRepository;
-    final private FileStoragePort fileStoragePort;
+    final private PhotoStoragePort fileStoragePort;
 
     private Photo createPhoto(PhotoFileDto photoFileDto) {
         String fileId = UUID.randomUUID().toString();
