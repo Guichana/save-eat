@@ -5,6 +5,7 @@ import save_eat.dto.storage.PhotoFileDto;
 import save_eat.ports.out.PhotoStoragePort;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 public class AwsS3StorageAdapter implements PhotoStoragePort {
@@ -29,6 +30,15 @@ public class AwsS3StorageAdapter implements PhotoStoragePort {
         RequestBody body = RequestBody.fromInputStream(saveDto.getInputStream(), saveDto.getSize());
 
         s3Client.putObject(putRequest, body);
+    }
+
+    public void delete(String fileName) {
+        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+            .bucket(bucket)
+            .key(keyPrefix + fileName)
+            .build();
+
+        s3Client.deleteObject(deleteRequest);
     }
 
 }

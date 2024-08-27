@@ -23,4 +23,8 @@ public class LocalStorageAdapter implements PhotoStoragePort {
         }
     }
 
+    public void delete(String fileName) {
+        dir.resolve(fileName).toFile().delete();
+    }
+
 }

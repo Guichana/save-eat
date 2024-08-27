@@ -1,6 +1,9 @@
 package save_eat;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -132,6 +135,7 @@ public class EatTest {
 			.build();
 
 		photoAddService.addPhoto(addDto);
+		verify(storageService).save(addDto.getPhotoFile());
 
 		var eat = eatRepository.findById(this.eat.getId()).get();
 		this.eat = eat;
@@ -194,6 +198,7 @@ public class EatTest {
 		var deleteDto = EatDeleteDto.from(userId, eat.getId());
 		eatDeleteService.delete(deleteDto);
 
+		verify(storageService).delete(anyString());
 		var readDto = EatReadDto.from(userId, eat.getId());
 		assertThrows(ResourceNotFoundException.class, () -> eatReadService.read(readDto));
 	}

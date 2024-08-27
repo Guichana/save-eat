@@ -7,6 +7,7 @@ public interface PhotoStoragePort {
     void save(PhotoFileDto fileDto);
 
     // String find(String name);
-    // void delete(String name);
+
+    void delete(String fileName);
 
 }
