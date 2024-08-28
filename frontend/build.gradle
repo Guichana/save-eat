@@ -1,0 +1,18 @@
+plugins {
+  id "com.github.node-gradle.node" version "7.0.1"
+}
+
+
+task build(type: NpmTask) {
+  group = "Frontend"
+  dependsOn npmInstall
+  args = ["run", "build"]
+
+  doFirst {
+    delete layout.buildDirectory
+  }
+
+  inputs.dir("src")
+  inputs.files("package.json", "package-lock.json", "*.config.js", "tsconfig.json")
+  outputs.dir(layout.buildDirectory)
+}

@@ -1,0 +1,5 @@
+export { default as NotFoundIcon } from "@/assets/svg/404.svg"
+export { default as GoogleIcon } from "@/assets/svg/google.svg"
+export { default as Logo } from "@/assets/svg/Logo_LongType.svg"
+export { default as LogoText } from "@/assets/svg/Logo_OnlyText.svg"
+export { default as LogoSqure } from "@/assets/svg/Logo_SqureType.svg"
